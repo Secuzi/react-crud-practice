@@ -13,7 +13,7 @@ const clients = [
     name: "Jane Doe",
     email: "jj@gmail.com",
     job: "Backend Developer",
-    rate: "100",
+    rate: "69",
     isActive: true,
   },
   {
@@ -26,7 +26,7 @@ const clients = [
   },
 ];
 
-export default function TableList({ onOpen, handleOpen }) {
+export default function TableList({ onOpen, handleUpdate }) {
   const clientRows = clients.map((client) => (
     <tr key={client.client_id}>
       <th>{client.client_id}</th>
@@ -47,7 +47,7 @@ export default function TableList({ onOpen, handleOpen }) {
       <td>
         <button
           className="btn btn-secondary mr-[10px]"
-          onClick={() => handleOpen("edit")}
+          onClick={() => handleUpdate(client)}
         >
           Update
         </button>

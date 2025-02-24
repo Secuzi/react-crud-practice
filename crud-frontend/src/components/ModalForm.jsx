@@ -1,16 +1,40 @@
 import { useState } from "react";
-
+import { useEffect } from "react";
 /* eslint-disable react/prop-types */ // TODO: upgrade to latest eslint tooling
 
-export default function ModalForm({ isOpen, onClose, mode, onSubmit }) {
+export default function ModalForm({
+  isOpen,
+  onClose,
+  mode,
+  onSubmit,
+  clientData,
+}) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     job: "",
     rate: 0,
-    isActive: false,
+    isActive: true,
   });
-  console.log(formData);
+  console.log("Form data: ", formData);
+  console.log("Client data: ", clientData);
+  // Sync formData with clientData when clientData changes
+  useEffect(() => {
+    console.log("in use effect");
+    if (clientData) {
+      setFormData(clientData); // Update formData with clientData
+    } else {
+      // Reset to default values if clientData is null
+      setFormData({
+        name: "",
+        email: "",
+        job: "",
+        rate: 0,
+        isActive: true,
+      });
+    }
+  }, [clientData]); // Run this effect whenever clientData changes
+
   function onChange(e) {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -56,6 +80,7 @@ export default function ModalForm({ isOpen, onClose, mode, onSubmit }) {
               className="grow"
               placeholder="john@gmail.com"
               onChange={onChange}
+              value={formData.email}
             />
           </label>
 
@@ -64,6 +89,7 @@ export default function ModalForm({ isOpen, onClose, mode, onSubmit }) {
             <input
               type="text"
               name="job"
+              value={formData.job}
               className="grow"
               placeholder="e.g astronaut"
               onChange={onChange}
@@ -76,6 +102,7 @@ export default function ModalForm({ isOpen, onClose, mode, onSubmit }) {
               <input
                 type="number"
                 name="rate"
+                value={formData.rate}
                 className="grow"
                 placeholder="Daisy"
                 min={0}
@@ -86,9 +113,12 @@ export default function ModalForm({ isOpen, onClose, mode, onSubmit }) {
             <select
               className="select select-bordered w-full max-w-xs"
               name="isActive"
+              value={formData.isActive}
               onChange={onChange}
             >
-              <option value={true}>Active</option>
+              <option value={true} defaultChecked>
+                Active
+              </option>
               <option value={false}>Inactive</option>
             </select>
           </div>
