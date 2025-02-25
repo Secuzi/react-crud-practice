@@ -2,6 +2,7 @@ import { useState } from "react";
 import ModalForm from "./components/ModalForm";
 import Navbar from "./components/Navbar";
 import TableList from "./components/TableList";
+
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [modalMode, setModalMode] = useState("add");
@@ -13,11 +14,13 @@ export default function App() {
     setIsOpen(true);
   };
 
-  // console.log(selectedClient);
-
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
     if (modalMode === "add") {
-      console.log("modal mode add");
+      const test = {
+        name: e.get("name"),
+        email: e.get("email"),
+      };
+      console.log(test);
     } else {
       console.log("modal mode edit");
     }
@@ -25,7 +28,6 @@ export default function App() {
 
   const handleUpdate = (client) => {
     setSelectedClient(client);
-    // setSelectedClient(client)
     handleOpen("edit");
   };
 
