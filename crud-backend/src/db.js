@@ -1,6 +1,6 @@
 import pg from "pg";
-
-const db = new pgClient({
+const { Client } = pg;
+const db = new Client({
   user: process.env.PG_USER,
   host: process.env.PG_HOST,
   database: process.env.PG_DATABASE,
