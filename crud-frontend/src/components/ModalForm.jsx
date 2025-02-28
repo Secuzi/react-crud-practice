@@ -40,6 +40,24 @@ export default function ModalForm({
     }));
   }
 
+  async function handleSubmit() {
+    try {
+      const clientData = { ...formData };
+      console.log("Submit Client Data", clientData);
+      setFormData({
+        name: "",
+        email: "",
+        job: "",
+        rate: 0,
+        isActive: true,
+      });
+      await onSubmit(clientData);
+    } catch (error) {
+      console.log(error);
+    }
+    onClose();
+  }
+
   return (
     <>
       <dialog id="my_modal_3" className="modal" open={isOpen}>
@@ -57,7 +75,7 @@ export default function ModalForm({
             {mode === "edit" ? "Edit Client" : "Client Details"}
           </h3>
 
-          <form action={onSubmit}>
+          <form action={handleSubmit}>
             <label className="input input-bordered flex items-center gap-2 mb-4">
               Name:
               <input

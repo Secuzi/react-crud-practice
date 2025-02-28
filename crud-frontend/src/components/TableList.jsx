@@ -1,31 +1,11 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
-import axios from "axios";
-
-export default function TableList({ onOpen, handleUpdate, searchTerm }) {
-  const [tableData, setTableData] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let res;
-        if (searchTerm) {
-          res = await axios.get(
-            `http://localhost:3000/api/clients/search?q=${searchTerm}`
-          );
-        } else {
-          res = await axios.get(`http://localhost:3000/api/clients/`);
-        }
-        setTableData(res.data);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-
-    fetchData();
-  }, [searchTerm]);
-
+/* eslint-disable react/prop-types */ // TODO: upgrade to latest eslint tooling
+export default function TableList({
+  handleUpdate,
+  tableData,
+  deleteClient,
+  error,
+}) {
   const clientRows = tableData.map((client) => (
     <tr key={client.client_id}>
       <th>{client.client_id}</th>
@@ -50,7 +30,12 @@ export default function TableList({ onOpen, handleUpdate, searchTerm }) {
         >
           Update
         </button>
-        <button className="btn btn-accent">Delete</button>
+        <button
+          className="btn btn-accent"
+          onClick={() => deleteClient(client.client_id)}
+        >
+          Delete
+        </button>
       </td>
     </tr>
   ));

@@ -31,7 +31,6 @@ export const updateClient = async (req, res) => {
   try {
     const { name, email, job, rate, isActive } = req.body;
     const { id } = req.params;
-
     const updatedClient = await clientService.updateClient(
       {
         name,
@@ -46,7 +45,6 @@ export const updateClient = async (req, res) => {
     if (!updateClient) {
       return res.json(404).json({ message: "Client not found" });
     }
-
     return res.status(200).json(updatedClient);
   } catch (e) {
     console.error("Error updating client: ", e);
