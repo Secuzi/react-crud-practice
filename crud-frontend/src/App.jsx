@@ -2,12 +2,12 @@ import { useState } from "react";
 import ModalForm from "./components/ModalForm";
 import Navbar from "./components/Navbar";
 import TableList from "./components/TableList";
-
+import axios from "axios";
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [modalMode, setModalMode] = useState("add");
   const [selectedClient, setSelectedClient] = useState(null);
-  //Header, values,
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleOpen = (mode) => {
     setModalMode(mode);
@@ -31,6 +31,10 @@ export default function App() {
     handleOpen("edit");
   };
 
+  const searchClient = (searchTerm) => {
+    setSearchTerm(searchTerm);
+  };
+
   const handleClose = () => {
     setSelectedClient(null);
     setIsOpen(false);
@@ -40,8 +44,8 @@ export default function App() {
   return (
     <>
       <header>
-        <Navbar onOpen={() => handleOpen("add")} />
-        <TableList handleUpdate={handleUpdate} />
+        <Navbar onOpen={() => handleOpen("add")} onSearch={searchClient} />
+        <TableList handleUpdate={handleUpdate} searchTerm={searchTerm} />
         <ModalForm
           isOpen={isOpen}
           onClose={handleClose}

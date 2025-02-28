@@ -1,35 +1,32 @@
 import clsx from "clsx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-const clients = [
-  {
-    client_id: 1,
-    name: "John Doe",
-    email: "jd@gmail.com",
-    job: "Web Developer",
-    rate: "100",
-    isActive: true,
-  },
-  {
-    client_id: 2,
-    name: "Jane Doe",
-    email: "jj@gmail.com",
-    job: "Backend Developer",
-    rate: "69",
-    isActive: true,
-  },
-  {
-    client_id: 3,
-    name: "Doe Doe",
-    email: "dd@gmail.com",
-    job: "Fullstack Developer",
-    rate: "100",
-    isActive: false,
-  },
-];
 
-export default function TableList({ onOpen, handleUpdate }) {
-  const clientRows = clients.map((client) => (
+export default function TableList({ onOpen, handleUpdate, searchTerm }) {
+  const [tableData, setTableData] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let res;
+        if (searchTerm) {
+          res = await axios.get(
+            `http://localhost:3000/api/clients/search?q=${searchTerm}`
+          );
+        } else {
+          res = await axios.get(`http://localhost:3000/api/clients/`);
+        }
+        setTableData(res.data);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    fetchData();
+  }, [searchTerm]);
+
+  const clientRows = tableData.map((client) => (
     <tr key={client.client_id}>
       <th>{client.client_id}</th>
       <td>{client.name}</td>
@@ -60,6 +57,7 @@ export default function TableList({ onOpen, handleUpdate }) {
 
   return (
     <>
+      {error && <div className="alert alert-error">{error}</div>}
       <div className="overflow-x-auto mt-10">
         <table className="table">
           {/* head */}
