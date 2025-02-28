@@ -12,7 +12,6 @@ export const createClient = async (clientData) => {
     `,
     [name, email, job, rate, isActive]
   );
-  console.log(rows);
   return rows[0];
 };
 
@@ -30,9 +29,21 @@ export const updateClient = async (clientData, clientId) => {
 export const deleteClient = async (clientId) => {
   const { rowCount } = await query(
     `
-      DELETE FROM clients WHERE id = $1  
+      DELETE FROM clients_tb WHERE id = $1  
     `,
     [clientId]
   );
   return rowCount > 0;
+};
+
+//Email or name
+export const searchClients = async (searchTerm) => {
+  const { rows } = await query(
+    `
+    SELECT * FROM clients_tb
+    WHERE name ILIKE $1 OR email ILIKE $1 OR job ILIKE $1
+    `,
+    [`%${searchTerm}%`]
+  );
+  return rows;
 };
